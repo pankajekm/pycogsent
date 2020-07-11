@@ -1,5 +1,6 @@
 import pandas as pd
-from pycogsent.basepredictor import DATA_PATH, BasePredictor
+from pycogsent.basepredictor import BasePredictor
+from pycogsent.config import DATA_PATH
 
 
 

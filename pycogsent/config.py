@@ -1,1 +1,1 @@
-DATA_PATH = "/home/pankaj/Documents/Python Projects/pycogsent/data"
+DATA_PATH = "pycogsent/data"
