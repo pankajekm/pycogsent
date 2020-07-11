@@ -5,10 +5,13 @@ import abc
 import nltk
 from pycogsent.SimpleTokenizer import SimpleTokenizer
 from pycogsent.SimpleStemmer import SimpleStemmer
-DATA_PATH = "/home/pankaj/Documents/Python Projects/pycogsent/data"
+from pycogsent.config import DATA_PATH
+# DATA_PATH = "/home/pankaj/Documents/Python Projects/pycogsent/data"
+
 class BasePredictor(object):
     __metaclass__ = abc.ABCMeta
     EPSILON = 1e-6
+
     def __init__(self,tokenizer=None):
         self._positiveTerms = set()
         self._negtiveTerms = set()
@@ -22,6 +25,7 @@ class BasePredictor(object):
 
         
         assert len(self._positiveTerms) > 0 and len(self._negativeTerms) > 0
+
     def tokenize(self,text):
         return self._tokenizer.tokenize(text)
         
@@ -29,12 +33,13 @@ class BasePredictor(object):
     def tokenizer(self,text):
         return re.split(r'(?<=[^A-Z].[.?]) +(?=[A-Z])', text) 
 
-
     def getFirstToken(self, tokens):
         return tokens.split(",")[0]
+
     @abc.abstractmethod
     def init_dictionary(self):
         pass
+
     def _getScore(self,token):
         print(token)
         if token in self._positiveTerms:
@@ -46,10 +51,11 @@ class BasePredictor(object):
             return -1
         print("neutral")
         return 0
+
     def stemWords(self,tokens):
         return self._stemmer.stemWords(tokens)
+
     def getScore(self,text):
-        
         tokens=self.tokenize(text.lower())
         for token in tokens:
             print(token)
