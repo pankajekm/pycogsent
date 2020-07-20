@@ -1,9 +1,9 @@
-import nltk
+import re
 class SimpleTokenizer():
     def tokenize(self,text):
         pattern="[\w']+"
+        return re.findall(text.lower(), pattern)
 
-        return nltk.regexp_tokenize(text.lower(), pattern)
 if __name__ == "__main__":
     ss=SimpleTokenizer()
     print(ss.tokenize("This is bad because of  misplaced and damage beyond"))
