@@ -2,7 +2,7 @@ import re
 class SimpleTokenizer():
     def tokenize(self,text):
         pattern="[\w']+"
-        return re.findall(text.lower(), pattern)
+        return re.findall(pattern, text.lower())
 
 if __name__ == "__main__":
     ss=SimpleTokenizer()
