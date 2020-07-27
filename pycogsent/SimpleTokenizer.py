@@ -1,7 +1,7 @@
 import re
 class SimpleTokenizer():
     def tokenize(self,text):
-        pattern="[\w']+"
+        pattern=r"[\w']+"
         return re.findall(pattern, text.lower())
 
 if __name__ == "__main__":

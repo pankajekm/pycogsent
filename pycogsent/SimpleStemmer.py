@@ -7,8 +7,9 @@ class SimpleStemmer():
     def stemWord(self,text):
         return self.ps.stem(text)
     def stemWords(self,tokens):
-        
         return list(map(self.stemWord,tokens))
+
+        
 if  __name__ == "__main__":
     "testing"
     ss=SimpleStemmer()

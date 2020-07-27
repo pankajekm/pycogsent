@@ -14,7 +14,7 @@ class BasePredictor(object):
 
     def __init__(self,tokenizer=None):
         self._positiveTerms = set()
-        self._negtiveTerms = set()
+        self._negativeTerms = set()
         if tokenizer is not None:
             self._tokenizer = tokenizer
         else:
