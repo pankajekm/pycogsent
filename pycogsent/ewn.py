@@ -3,7 +3,7 @@ from pycogsent.basepredictor import BasePredictor
 from pycogsent.config import DATA_PATH
 from pycogsent.SimpleStemmer import SimpleStemmer
 
-class EFN(BasePredictor):
+class EWN(BasePredictor):
 
     DICT_PATH = "%s/dictionaries/effectwordnet/goldStandard.tff"%DATA_PATH
     _stemmer = SimpleStemmer()
