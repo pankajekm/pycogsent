@@ -188,10 +188,18 @@ class porter_stem:
 
         (*v*) Y -> I                    happy        ->  happi
                                         sky          ->  sky
-        """
-        if word.endswith('y') and self._has_vowel(word[:-1]):
-            word = self._replace(word, 'y', 'i')
 
+        **_modified_rule **
+
+        (*c and not c) Y -> I           happy        -> happi
+                                        enjoy       -> enjoy
+                                        spy          -> spi
+        """
+
+
+        if word.endswith('y') and len(word) > 2 and not self._is_vowel(word,-2):
+            word = self._replace(word, 'y', 'i')
+            
         return word
 
 
@@ -252,11 +260,11 @@ class porter_stem:
 if __name__ == "__main__":
     stemmer = porter_stem()
     test_string = ["caresses", "ponies", "caress", "cats","ties", "feed","agreed","plastered",
-                "spied","died","conflated","troubled","sized","tanned","falling","failing","filing","happy","sky"]
+                "spied","died","conflated","troubled","sized","tanned","falling","failing","filing","happy","sky","enjoy"]
 
 
     correct_stem = ["caress", "poni", "caress", "cat", "tie", "feed","agree","plaster",
-                "spi","die","conflate","trouble","size","tan","fall","fail","file","happi","sky"]
+                "spi","die","conflate","trouble","size","tan","fall","fail","file","happi","ski","enjoy"]
 
     # test_string = ["plastered"]
     # correct_stem = ["plaster"]
