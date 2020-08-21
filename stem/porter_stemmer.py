@@ -1,3 +1,6 @@
+""" This implementation of porter stem is based on original algorithem and modification proposed by nltk"""
+
+
 class porter_stem:
 
     def __init__(self):
