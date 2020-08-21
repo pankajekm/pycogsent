@@ -288,6 +288,8 @@ class porter_stem:
             word = self._replace(word, 'iviti', 'ive')
         elif word.endswith('biliti')  and self._m_count(word[:-6]):
             word = self._replace(word, 'biliti', 'ble')
+        elif word.endswith('logi')  and self._m_count(word[:-3]):
+            word = self._replace(word, 'logi', 'log')
         elif word.endswith('logi')  and self._m_count(word[:-4]):
             word = self._replace(word, 'logi', 'log')
         elif word.endswith('fulli')  and self._m_count(word[:-5]):
@@ -298,7 +300,31 @@ class porter_stem:
 
     def _step3(self,word):
 
-        """*********NOT COMPLETED*********"""
+        """Step 3
+
+        (m>0) ICATE ->  IC              triplicate     ->  triplic
+        (m>0) ATIVE ->                  formative      ->  form
+        (m>0) ALIZE ->  AL              formalize      ->  formal
+        (m>0) ICITI ->  IC              electriciti    ->  electric
+        (m>0) ICAL  ->  IC              electrical     ->  electric
+        (m>0) FUL   ->                  hopeful        ->  hope
+        (m>0) NESS  ->                  goodness       ->  good
+        """
+
+        if word.endswith('icate') and self._m_count(word[:-5]):
+            word = self._replace(word, 'icate', 'ic')
+        elif word.endswith('ative') and self._m_count(word[:-5]):
+            word = self._replace(word, 'ative', '')
+        elif word.endswith('alize') and self._m_count(word[:-5]):
+            word = self._replace(word, 'alize', 'al')
+        elif word.endswith('iciti') and self._m_count(word[:-5]):
+            word = self._replace(word, 'iciti', 'ic')
+        elif word.endswith('ical') and self._m_count(word[:-4]):
+            word = self._replace(word, 'ical', 'ic')
+        elif word.endswith('ful') and self._m_count(word[:-3]):
+            word = self._replace(word, 'ful', '')
+        elif word.endswith('ness')and self._m_count(word[:-4]):
+            word = self._replace(word, 'ness', '')
     
         return word
 
@@ -349,17 +375,19 @@ if __name__ == "__main__":
                 "spied","died","conflated","troubled","sized","tanned","falling","failing","filing","happy","sky","enjoy",
                 'relational', 'conditional', 'rational', 'valenci', 'hesitanci', 'digitizer', 'conformabli', 'radicalli',
                 'differentli', 'vileli', 'analogousli', 'vietnamization', 'predication', 'operator', 'feudalism',
-                'decisiveness', 'hopefulness', 'callousness', 'formaliti', 'sensitiviti', 'sensibiliti']
+                'decisiveness', 'hopefulness', 'callousness', 'formaliti', 'sensitiviti', 'sensibiliti',"geologi",
+                'triplicate', 'formative', 'formalize', 'electriciti', 'electrical', 'hopeful', 'goodness']
 
 
     correct_stem = ["caress", "poni", "caress", "cat", "tie", "feed","agree","plaster",
                 "spi","die","conflate","trouble","size","tan","fall","fail","file","happi","ski","enjoy",
-                'relate', 'condition', 'rational', 'valence', 'hesitance', 'digitize', 'conformable', 'radical',
-                'different', 'vile', 'analogous', 'vietnamize', 'predicate', 'operate', 'feudal',
-                'decisive', 'hopeful', 'callous', 'formal', 'sensitive', 'sensible']
+                'relate', 'condition', 'rational', 'valence', 'hesitance', 'digitize', 'conformable', 'radic',
+                'different', 'vile', 'analogous', 'vietnamize', 'predic', 'operate', 'feudal',
+                'decisive', 'hope', 'callous', 'formal', 'sensitive', 'sensible',"geolog",
+                'triplic', 'form', 'formal', 'electric', 'electric', 'hope', 'good']
 
-    # test_string = ["plastered"]
-    # correct_stem = ["plaster"]
+    # test_string = ["radicalli"]
+    # correct_stem = ["radical"]
 
     print(("{:<15} ==> {:<10} {:<10} {:<15}".format("word", "stemed_word", "actual_stem", "match")))
     for i in range(len(test_string)):
