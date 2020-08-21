@@ -205,8 +205,94 @@ class porter_stem:
 
     def _step2(self,word):
 
-        """*********NOT COMPLETED*********"""
-    
+        """Step 2
+
+        (m>0) ATIONAL ->  ATE           relational     ->  relate
+        (m>0) TIONAL  ->  TION          conditional    ->  condition
+                                        rational       ->  rational
+        (m>0) ENCI    ->  ENCE          valenci        ->  valence
+        (m>0) ANCI    ->  ANCE          hesitanci      ->  hesitance
+        (m>0) IZER    ->  IZE           digitizer      ->  digitize
+        (m>0) ABLI    ->  ABLE          conformabli    ->  conformable
+        (m>0) ALLI    ->  AL            radicalli      ->  radical
+        (m>0) ENTLI   ->  ENT           differentli    ->  different
+        (m>0) ELI     ->  E             vileli        - >  vile
+        (m>0) OUSLI   ->  OUS           analogousli    ->  analogous
+        (m>0) IZATION ->  IZE           vietnamization ->  vietnamize
+        (m>0) ATION   ->  ATE           predication    ->  predicate
+        (m>0) ATOR    ->  ATE           operator       ->  operate
+        (m>0) ALISM   ->  AL            feudalism      ->  feudal
+        (m>0) IVENESS ->  IVE           decisiveness   ->  decisive
+        (m>0) FULNESS ->  FUL           hopefulness    ->  hopeful
+        (m>0) OUSNESS ->  OUS           callousness    ->  callous
+        (m>0) ALITI   ->  AL            formaliti      ->  formal
+        (m>0) IVITI   ->  IVE           sensitiviti    ->  sensitive
+        (m>0) BILITI  ->  BLE           sensibiliti    ->  sensible
+        
+
+        **_Additional_rule **
+
+        (m>0) logi    ->  log
+        (m>0) fulli   -> ful     
+
+
+
+         **_modified_rule **
+
+        The Step 2 rule
+            (m>0) abli  →  able
+        is replaced by
+            (m>0) bli  →  ble
+        
+        
+        """
+
+
+        if word.endswith('ational') and self._m_count(word[:-7]):
+            word = self._replace(word, 'ational', 'ate')
+        elif word.endswith('tional')  and self._m_count(word[:-6]):
+            word = self._replace(word, 'tional', 'tion')
+        elif word.endswith('enci')  and self._m_count(word[:-4]):
+            word = self._replace(word, 'enci', 'ence')
+        elif word.endswith('anci')  and self._m_count(word[:-4]):
+            word = self._replace(word, 'anci', 'ance')
+        elif word.endswith('izer')  and self._m_count(word[:-4]):
+            word = self._replace(word, 'izer', 'ize')
+        elif word.endswith('bli')  and self._m_count(word[:-3]):
+            word = self._replace(word, 'bli', 'ble')
+        elif word.endswith('alli')  and self._m_count(word[:-4]):
+            word = self._replace(word, 'alli', 'al')
+        elif word.endswith('entli')  and self._m_count(word[:-5]):
+            word = self._replace(word, 'entli', 'ent')
+        elif word.endswith('eli')  and self._m_count(word[:-3]):
+            word = self._replace(word, 'eli', 'e')
+        elif word.endswith('ousli') and self._m_count(word[:-5]):
+            word = self._replace(word, 'ousli', 'ous')
+        elif word.endswith('ization')  and self._m_count(word[:-7]):
+            word = self._replace(word, 'ization', 'ize')
+        elif word.endswith('ation')  and self._m_count(word[:-5]):
+            word = self._replace(word, 'ation', 'ate')
+        elif word.endswith('ator')  and self._m_count(word[:-4]):
+            word = self._replace(word, 'ator', 'ate')
+        elif word.endswith('alism')  and self._m_count(word[:-5]):
+            word = self._replace(word, 'alism', 'al')
+        elif word.endswith('iveness')  and self._m_count(word[:-7]):
+            word = self._replace(word, 'iveness', 'ive')
+        elif word.endswith('fulness')  and self._m_count(word[:-7]):
+            word = self._replace(word, 'fulness', 'ful')
+        elif word.endswith('ousness')  and self._m_count(word[:-7]):
+            word = self._replace(word, 'ousness', 'ous')
+        elif word.endswith('aliti')  and self._m_count(word[:-5]):
+            word = self._replace(word, 'aliti', 'al')
+        elif word.endswith('iviti')  and self._m_count(word[:-5]):
+            word = self._replace(word, 'iviti', 'ive')
+        elif word.endswith('biliti')  and self._m_count(word[:-6]):
+            word = self._replace(word, 'biliti', 'ble')
+        elif word.endswith('logi')  and self._m_count(word[:-4]):
+            word = self._replace(word, 'logi', 'log')
+        elif word.endswith('fulli')  and self._m_count(word[:-5]):
+            word = self._replace(word, 'fulli', 'ful')
+
         return word
 
 
@@ -260,11 +346,17 @@ class porter_stem:
 if __name__ == "__main__":
     stemmer = porter_stem()
     test_string = ["caresses", "ponies", "caress", "cats","ties", "feed","agreed","plastered",
-                "spied","died","conflated","troubled","sized","tanned","falling","failing","filing","happy","sky","enjoy"]
+                "spied","died","conflated","troubled","sized","tanned","falling","failing","filing","happy","sky","enjoy",
+                'relational', 'conditional', 'rational', 'valenci', 'hesitanci', 'digitizer', 'conformabli', 'radicalli',
+                'differentli', 'vileli', 'analogousli', 'vietnamization', 'predication', 'operator', 'feudalism',
+                'decisiveness', 'hopefulness', 'callousness', 'formaliti', 'sensitiviti', 'sensibiliti']
 
 
     correct_stem = ["caress", "poni", "caress", "cat", "tie", "feed","agree","plaster",
-                "spi","die","conflate","trouble","size","tan","fall","fail","file","happi","ski","enjoy"]
+                "spi","die","conflate","trouble","size","tan","fall","fail","file","happi","ski","enjoy",
+                'relate', 'condition', 'rational', 'valence', 'hesitance', 'digitize', 'conformable', 'radical',
+                'different', 'vile', 'analogous', 'vietnamize', 'predicate', 'operate', 'feudal',
+                'decisive', 'hopeful', 'callous', 'formal', 'sensitive', 'sensible']
 
     # test_string = ["plastered"]
     # correct_stem = ["plaster"]
