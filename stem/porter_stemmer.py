@@ -81,8 +81,10 @@ class porter_stem:
         word[-1] not in ("w", "x", "y")):
 
             return True
-        else:
-            return False
+        elif len(word) == 2 and self._is_vowel(word, 0) and not self._is_vowel(word, 1):
+            return True
+        
+        return False
 
 
     def _step1a(self,word):
@@ -331,22 +333,107 @@ class porter_stem:
 
     def _step4(self,word):
 
-        """*********NOT COMPLETED*********"""
-    
+        """Step 4
+
+        (m>1) AL    ->                  revival        ->  reviv
+        (m>1) ANCE  ->                  allowance      ->  allow
+        (m>1) ENCE  ->                  inference      ->  infer
+        (m>1) ER    ->                  airliner       ->  airlin
+        (m>1) IC    ->                  gyroscopic     ->  gyroscop
+        (m>1) ABLE  ->                  adjustable     ->  adjust
+        (m>1) IBLE  ->                  defensible     ->  defens
+        (m>1) ANT   ->                  irritant       ->  irrit
+        (m>1) EMENT ->                  replacement    ->  replac
+        (m>1) MENT  ->                  adjustment     ->  adjust
+        (m>1) ENT   ->                  dependent      ->  depend
+        (m>1 and (*S or *T)) ION ->     adoption       ->  adopt
+        (m>1) OU    ->                  homologou      ->  homolog
+        (m>1) ISM   ->                  communism      ->  commun
+        (m>1) ATE   ->                  activate       ->  activ
+        (m>1) ITI   ->                  angulariti     ->  angular
+        (m>1) OUS   ->                  homologous     ->  homolog
+        (m>1) IVE   ->                  effective      ->  effect
+        (m>1) IZE   ->                  bowdlerize     ->  bowdler
+        """
+
+
+        if word.endswith('al') and self._m_count(word[:-2]) > 1:
+            word = self._replace(word, 'al', '')
+        elif word.endswith('ance') and self._m_count(word[:-4]) > 1:
+            word = self._replace(word, 'ance', '')
+        elif word.endswith('ence') and self._m_count(word[:-4]) > 1:
+            word = self._replace(word, 'ence', '')
+        elif word.endswith('er') and self._m_count(word[:-2]) > 1:
+            word = self._replace(word, 'er', '')
+        elif word.endswith('ic') and self._m_count(word[:-2]) > 1:
+            word = self._replace(word, 'ic', '')
+        elif word.endswith('able') and self._m_count(word[:-4]) > 1:
+            word = self._replace(word, 'able', '')
+        elif word.endswith('ible') and self._m_count(word[:-4]) > 1:
+            word = self._replace(word, 'ible', '')
+        elif word.endswith('ant') and self._m_count(word[:-3]) > 1:
+            word = self._replace(word, 'ant', '')
+        elif word.endswith('ement') and self._m_count(word[:-5]) > 1:
+            word = self._replace(word, 'ement', '')
+        elif word.endswith('ment') and self._m_count(word[:-4]) > 1:
+            word = self._replace(word, 'ment', '')
+        elif word.endswith('ent') and self._m_count(word[:-3]) > 1:
+            word = self._replace(word, 'ent', '')
+        elif word.endswith('ion') and self._m_count(word[:-3]) > 1:
+            if word[:-3].endswith('s') or word[:-3].endswith('t'):
+                word = word[:-3]
+        elif word.endswith('ou') and self._m_count(word[:-2]) > 1:
+            word = self._replace(word, 'ou', '')
+        elif word.endswith('ism') and self._m_count(word[:-3]) > 1:
+            word = self._replace(word, 'ism', '')
+        elif word.endswith('ate') and self._m_count(word[:-3]) > 1:
+            word = self._replace(word, 'ate', '')
+        elif word.endswith('iti') and self._m_count(word[:-3]) > 1:
+            word = self._replace(word, 'iti', '')
+        elif word.endswith('ous') and self._m_count(word[:-3]) > 1:
+            word = self._replace(word, 'ous', '')
+        elif word.endswith('ive') and self._m_count(word[:-3]) > 1:
+            word = self._replace(word, 'ive', '')
+        elif word.endswith('ize') and self._m_count(word[:-3]) > 1:
+            word = self._replace(word, 'ize', '')
+
         return word
 
 
     def _step5a(self,word):
 
-        """*********NOT COMPLETED*********"""
-    
+        """Step 5a
+
+        (m>1) E     ->                  probate        ->  probat
+                                        rate           ->  rate
+        (m=1 and not *o) E ->           cease          ->  ceas
+
+
+         **_ NOTE_**
+         if rule 1 fails rule 2 should also be checked        
+        """
+
+
+        if word.endswith('e'):
+            base = word[:-1]
+            if self._m_count(base) > 1:
+                word = base
+            elif self._m_count(base) == 1 and not self._cvc(base):
+                word = base
+
         return word
 
 
     def _step5b(self,word):
 
-        """*********NOT COMPLETED*********"""
-    
+        """Step 5b
+
+        (m > 1 and *d and *L) -> single letter
+                                        controll       ->  control
+                                        roll           ->  roll
+        """
+        if word.endswith('ll') and self._m_count(word[:-1]) > 1 :
+            word = word[:-1]
         return word
 
 
@@ -357,6 +444,10 @@ class porter_stem:
         """
 
         stem = word.lower()
+
+        # dont test words less than length 2
+        if len(word) <=2:
+            return word
 
         stem = self._step1a(stem)
         stem = self._step1b(stem)
@@ -370,24 +461,36 @@ class porter_stem:
         return stem
 
 if __name__ == "__main__":
-    stemmer = porter_stem()
+
     test_string = ["caresses", "ponies", "caress", "cats","ties", "feed","agreed","plastered",
                 "spied","died","conflated","troubled","sized","tanned","falling","failing","filing","happy","sky","enjoy",
                 'relational', 'conditional', 'rational', 'valenci', 'hesitanci', 'digitizer', 'conformabli', 'radicalli',
                 'differentli', 'vileli', 'analogousli', 'vietnamization', 'predication', 'operator', 'feudalism',
                 'decisiveness', 'hopefulness', 'callousness', 'formaliti', 'sensitiviti', 'sensibiliti',"geologi",
-                'triplicate', 'formative', 'formalize', 'electriciti', 'electrical', 'hopeful', 'goodness']
+                'triplicate', 'formative', 'formalize', 'electriciti', 'electrical', 'hopeful', 'goodness',
+                'revival', 'allowance', 'inference', 'airliner', 'gyroscopic', 'adjustable', 'defensible',
+                'irritant', 'replacement', 'adjustment', 'dependent', 'adoption', 'homologou', 'communism',
+                'activate', 'angulariti', 'homologous', 'effective', 'bowdlerize',
+                'probate', 'rate', 'cease', 'controll','roll']
 
 
-    correct_stem = ["caress", "poni", "caress", "cat", "tie", "feed","agree","plaster",
-                "spi","die","conflate","trouble","size","tan","fall","fail","file","happi","ski","enjoy",
-                'relate', 'condition', 'rational', 'valence', 'hesitance', 'digitize', 'conformable', 'radic',
-                'different', 'vile', 'analogous', 'vietnamize', 'predic', 'operate', 'feudal',
-                'decisive', 'hope', 'callous', 'formal', 'sensitive', 'sensible',"geolog",
-                'triplic', 'form', 'formal', 'electric', 'electric', 'hope', 'good']
 
-    # test_string = ["radicalli"]
-    # correct_stem = ["radical"]
+    correct_stem = ['caress', 'poni', 'caress', 'cat', 'tie', 'feed', 'agre', 'plaster',
+                    'spi', 'die', 'conflat', 'troubl', 'size', 'tan', 'fall', 'fail', 'file', 'happi', 'ski', 'enjoy',
+                    'relat', 'condit', 'ration', 'valenc', 'hesit', 'digit', 'conform', 'radic',
+                    'differ', 'vile', 'analog', 'vietnam', 'predic', 'oper', 'feudal',
+                    'decis', 'hope', 'callous', 'formal', 'sensit', 'sensibl', 'geolog',
+                    'triplic', 'form', 'formal', 'electr', 'electr', 'hope', 'good',
+                    'reviv', 'allow', 'infer', 'airlin', 'gyroscop', 'adjust', 'defens',
+                    'irrit', 'replac', 'adjust', 'depend', 'adopt', 'homolog', 'commun',
+                    'activ', 'angular', 'homolog', 'effect', 'bowdler',
+                    'probat', 'rate', 'ceas', 'control','roll']
+
+    # test_string = ["skies"]
+    # correct_stem = ["ski"]
+
+    stemmer = porter_stem()
+
 
     print(("{:<15} ==> {:<10} {:<10} {:<15}".format("word", "stemed_word", "actual_stem", "match")))
     for i in range(len(test_string)):
@@ -395,5 +498,6 @@ if __name__ == "__main__":
         stemed_word = stemmer.stem(test_string[i])
         actual_stem = correct_stem[i]
         print(("{:<15} ==>     {:<10} {:<10} {:<15}".format(word, stemed_word, actual_stem, stemed_word == actual_stem)))
+
 
 
